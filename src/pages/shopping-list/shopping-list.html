@@ -14,11 +14,25 @@
 
 
 <ion-content padding>
-<form>
+  <form #f="ngForm" (ngSubmit)=onSubmit(f)>
+    <ion-list>
+      <ion-item>
+        <ion-label fixed>name</ion-label>
+        <ion-input #ingredientName="ngModel" ngModel a-ngM type="text" name="ingredientName" placeholder="milk"
+                   required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label fixed>amount</ion-label>
+        <ion-input #amount="ngModel" ngModel type="number" name="amount" placeholder="2" required></ion-input>
+      </ion-item>
+    </ion-list>
+    <button a- [disabled]="f.invalid" ion-button type="submit" block> Add item</button>
+  </form>
+
   <ion-list>
-    <ion-item>
-      
+    <ion-item *ngFor="let item of items">
+      <ion-icon  name="trash" item-left></ion-icon>
+      <h3>{{item.name}}({{item.amount}})</h3>
     </ion-item>
   </ion-list>
-</form>
 </ion-content>
