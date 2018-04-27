@@ -8,7 +8,7 @@ import {
   ToastController
 } from 'ionic-angular';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Recipe} from "../../models/ingredient";
+import {Recipe} from "../../models/models";
 
 
 /**

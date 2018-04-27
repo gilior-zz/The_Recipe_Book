@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Recipe} from "../../models/ingredient";
+import {Recipe} from "../../models/models";
 
 /**
  * Generated class for the RecipePage page.
