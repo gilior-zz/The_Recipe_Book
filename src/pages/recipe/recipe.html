@@ -7,12 +7,30 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>recipe</ion-title>
+    <ion-title>{{status}} recipe</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-
+  <form [formGroup]="formGroup">
+    <ion-list>
+      <ion-item>
+        <ion-label floating>title</ion-label>
+        <ion-input formControlName="name"  type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>decription</ion-label>
+        <ion-textarea formControlName="description"></ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>difficulty</ion-label>
+        <ion-select formControlName="difficulty">
+          <ion-option [value]="option" *ngFor="let option of options">{{option}}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+    <button [disabled]="formGroup.valid" type="submit" block ion-button>{{status}} recipe</button>
+  </form>
 </ion-content>
