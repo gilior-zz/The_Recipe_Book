@@ -1,7 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {
+  ActionSheetController,
+  AlertController,
+  IonicPage,
+  NavController,
+  NavParams,
+  ToastController
+} from 'ionic-angular';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Recipe} from "../../models/ingredient";
+
 
 /**
  * Generated class for the EditRecipePage page.
@@ -23,12 +31,19 @@ export class EditRecipePage implements OnInit {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              private  fb: FormBuilder) {
+              private  fb: FormBuilder,
+              private actionSheetController: ActionSheetController,
+              private  alertController: AlertController,
+              private toastController: ToastController) {
 
   }
 
   get status(): string {
     return this.isNew ? 'add' : 'edit';
+  }
+
+  get ingredientsCtrl(): FormArray {
+    return this.formGroup.get('ingredients') as FormArray
   }
 
   ngOnInit(): void {
@@ -41,16 +56,72 @@ export class EditRecipePage implements OnInit {
     console.log('ionViewDidLoad EditRecipePage');
   }
 
-  onSubmit(){
-    console.log('this.formGroup ',this.formGroup)
+  onSubmit() {
+    console.log('this.formGroup ', this.formGroup)
+  }
+
+  onManageIngredients() {
+    const actionSheetController = this.actionSheetController.create(
+      {
+        title: 'wat y wana do', buttons: [
+        {
+          text: 'add ingredients', handler: () => {
+          let ctrl = this.createIngredientCtrl();
+          ctrl.present();
+        }
+        },
+        {
+          text: 'remove ingredients', role: 'destructive', handler: () => {
+          let len = this.ingredientsCtrl.length;
+          for (let i = len - 1; i >= 0; i--) {
+            this.ingredientsCtrl.removeAt(i);
+          }
+          this.toastController.create({duration:1000,message:'all removed'}).present();
+        }
+        },
+        {text: 'cancel', role: 'cancel'},
+      ]
+      }
+    );
+    actionSheetController.present();
+  }
+
+  private createIngredientCtrl() {
+    const alertController = this.alertController.create({
+      title: 'add ingredients',
+      inputs: [
+        {
+          name: 'name',
+          placeholder: 'name'
+        }
+      ],
+      buttons: [
+        {text: 'cancel', role: 'Cancel'},
+        {
+          text: 'add', handler: (data) => {
+          if (!data.name.trim()) {
+            this.toastController.create({message: 'imaginary text?',duration:1000}).present();
+          }
+          else {
+            this.ingredientsCtrl.push(new FormControl(data.name, Validators.required))
+            this.toastController.create({duration:1000,message:'added'}).present();
+          }
+        }
+        },
+      ]
+    });
+
+    return alertController;
   }
 
   private createForm() {
     this.formGroup = this.fb.group({
-      name: [this.isNew ? '': this.recipe.name,[Validators.required]],
-      description: [this.isNew ? '': this.recipe.description,Validators.required],
-      difficulty: [this.isNew ? 'easy': this.recipe.difficulty,Validators.required],
+      name: [this.isNew ? '' : this.recipe.name, [Validators.required]],
+      description: [this.isNew ? '' : this.recipe.description, Validators.required],
+      difficulty: [this.isNew ? 'easy' : this.recipe.difficulty, Validators.required],
+      ingredients: this.fb.array(this.isNew ? [] : this.recipe.ingredients)
+
+
     })
   }
-
 }

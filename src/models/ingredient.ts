@@ -6,5 +6,6 @@ export class Ingredient {
 export interface Recipe {
   name: string;
   description: string;
-  difficulty: string
+  difficulty: string,
+  ingredients:Ingredient[]
 }
