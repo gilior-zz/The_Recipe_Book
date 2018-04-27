@@ -41,6 +41,10 @@ export class RecipePage implements OnInit {
     console.log('ionViewDidLoad RecipePage');
   }
 
+  onSubmit(){
+    console.log('this.formGroup ',this.formGroup)
+  }
+
   private createForm() {
     this.formGroup = this.fb.group({
       name: [this.isNew ? '': this.recipe.name,[Validators.required]],
