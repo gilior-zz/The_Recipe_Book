@@ -24,6 +24,6 @@ export class RecipesPage {
 
   onNewRecipe() {
 
-    this.navCtrl.push('RecipePage');
+    this.navCtrl.push('EditRecipePage');
   }
 }
