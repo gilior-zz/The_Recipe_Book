@@ -42,4 +42,8 @@ export class ShoppingListPage {
     // this.changeDetectorRef.detectChanges();
   }
 
+  onRemove(item: Ingredient) {
+    this.shoppingListService.removeIngredient(item);
+  }
+
 }

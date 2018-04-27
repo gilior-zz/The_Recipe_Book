@@ -31,8 +31,12 @@
 
   <ion-list>
     <ion-item *ngFor="let item of items">
-      <ion-icon  name="trash" item-left></ion-icon>
-      <h3>{{item.name}}({{item.amount}})</h3>
+      <h3>
+        <ion-icon (click)="onRemove(item)" name="trash" item-left></ion-icon>
+        {{item.name}}({{item.amount}})
+      </h3>
+
+
     </ion-item>
   </ion-list>
 </ion-content>
