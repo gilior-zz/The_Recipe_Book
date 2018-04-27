@@ -7,30 +7,32 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{status}} recipe</ion-title>
+    <ion-title>{{recipe.name}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
-  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+<ion-content padding text-center>
+  <ion-card>
+    <ion-card-header>
+      <h1> {{recipe.description}}</h1>
+    </ion-card-header>
+    <h3>{{recipe.difficulty}}</h3>
     <ion-list>
-      <ion-item>
-        <ion-label floating>title</ion-label>
-        <ion-input formControlName="name"  type="text"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>decription</ion-label>
-        <ion-textarea formControlName="description"></ion-textarea>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>difficulty</ion-label>
-        <ion-select formControlName="difficulty">
-          <ion-option [value]="option" *ngFor="let option of options">{{option}}</ion-option>
-        </ion-select>
+      <ion-list-header>ingredients</ion-list-header>
+      <ion-item *ngFor="let ing of recipe?.ingredients">
+        {{ing.name}}
+        <ion-note>{{ing.amount}}</ion-note>
       </ion-item>
     </ion-list>
-    <button [disabled]="!formGroup.valid" type="submit" block ion-button>{{status}} recipe</button>
-  </form>
+  </ion-card>
+  <ion-grid>
+    <ion-row>
+      <ion-col ion-button [color]="'light'" (click)="onEdit()">edit</ion-col>
+      <ion-col ion-button color="danger" (click)="onDelete()">delete</ion-col>
+    </ion-row>
+
+
+  </ion-grid>
 </ion-content>

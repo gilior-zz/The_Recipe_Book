@@ -8,7 +8,8 @@ import {
   ToastController
 } from 'ionic-angular';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Recipe} from "../../models/models";
+import {Ingredient, Recipe} from "../../models/models";
+import {RecipesService} from "../../services/recipes.service";
 
 
 /**
@@ -34,7 +35,8 @@ export class EditRecipePage implements OnInit {
               private  fb: FormBuilder,
               private actionSheetController: ActionSheetController,
               private  alertController: AlertController,
-              private toastController: ToastController) {
+              private toastController: ToastController,
+              private recipesService: RecipesService) {
 
   }
 
@@ -47,7 +49,7 @@ export class EditRecipePage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.recipe = this.navParams.get('recipe') as Recipe;
+    this.recipe = this.navParams.data as Recipe;
     this.isNew = this.recipe === undefined;
     this.createForm();
   }
@@ -58,6 +60,24 @@ export class EditRecipePage implements OnInit {
 
   onSubmit() {
     console.log('this.formGroup ', this.formGroup)
+    const formModel = this.formGroup.value;
+    // deep copy of form model lairs
+    const ingredientsDeepCopy: Ingredient[] = formModel.ingredients.map(
+      (name: string) => {
+        return {name: name, amount: 0}
+      }
+    );
+
+    const toSave: Recipe = {
+      name: formModel.name,
+      ingredients: ingredientsDeepCopy,
+      difficulty: formModel.difficulty,
+      description: formModel.description
+    }
+
+    this.recipesService.addRecipe(toSave);
+    this.formGroup.reset();
+    this.navCtrl.popToRoot();
   }
 
   onManageIngredients() {
@@ -76,7 +96,7 @@ export class EditRecipePage implements OnInit {
           for (let i = len - 1; i >= 0; i--) {
             this.ingredientsCtrl.removeAt(i);
           }
-          this.toastController.create({duration:1000,message:'all removed'}).present();
+          this.toastController.create({duration: 1000, message: 'all removed'}).present();
         }
         },
         {text: 'cancel', role: 'cancel'},
@@ -100,11 +120,11 @@ export class EditRecipePage implements OnInit {
         {
           text: 'add', handler: (data) => {
           if (!data.name.trim()) {
-            this.toastController.create({message: 'imaginary text?',duration:1000}).present();
+            this.toastController.create({message: 'imaginary text?', duration: 1000}).present();
           }
           else {
             this.ingredientsCtrl.push(new FormControl(data.name, Validators.required))
-            this.toastController.create({duration:1000,message:'added'}).present();
+            this.toastController.create({duration: 1000, message: 'added'}).present();
           }
         }
         },

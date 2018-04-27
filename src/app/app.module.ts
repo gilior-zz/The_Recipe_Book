@@ -8,6 +8,7 @@ import {MyApp} from './app.component';
 
 import {TabsPage} from "../pages/tabs/tabs";
 import {ExpansionService} from "../services/expansion";
+import {RecipesService} from "../services/recipes.service";
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import {ExpansionService} from "../services/expansion";
     StatusBar,
     SplashScreen,
     ExpansionService,
+    RecipesService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

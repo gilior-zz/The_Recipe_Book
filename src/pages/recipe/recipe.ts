@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {IonicPage, NavController, NavParams, ToastController} from 'ionic-angular';
+import {FormBuilder} from "@angular/forms";
 import {Recipe} from "../../models/models";
+import {RecipesService} from "../../services/recipes.service";
 
 /**
  * Generated class for the RecipePage page.
@@ -16,40 +17,26 @@ import {Recipe} from "../../models/models";
   templateUrl: 'recipe.html',
 })
 export class RecipePage implements OnInit {
-  options = ['easy', 'medium', 'hard'];
-  private isNew: boolean;
-  private formGroup: FormGroup;
   private recipe: Recipe;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              private  fb: FormBuilder) {
+              private  recipesService: RecipesService,
+              private toastController:ToastController) {
 
-  }
-
-  get status(): string {
-    return this.isNew ? 'add' : 'edit';
   }
 
   ngOnInit(): void {
-    this.recipe = this.navParams.get('recipe') as Recipe;
-    this.isNew = this.recipe === undefined;
-    this.createForm();
+    this.recipe = this.navParams.data as Recipe;
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad RecipePage');
+
+  onEdit() {
+    this.navCtrl.push('EditRecipePage',this.recipe)
   }
 
-  onSubmit(){
-    console.log('this.formGroup ',this.formGroup)
-  }
-
-  private createForm() {
-    this.formGroup = this.fb.group({
-      name: [this.isNew ? '': this.recipe.name,[Validators.required]],
-      description: [this.isNew ? '': this.recipe.description,Validators.required],
-      difficulty: [this.isNew ? 'easy': this.recipe.difficulty,Validators.required],
-    })
+  onDelete() {
+    this.recipesService.removeRecipe(this.recipe);
+    this.toastController.create({message:'deleted',duration:1000}).present();this.navCtrl.popToRoot();
   }
 }
