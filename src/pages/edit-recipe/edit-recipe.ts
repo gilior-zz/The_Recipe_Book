@@ -99,7 +99,7 @@ export class EditRecipePage implements OnInit {
       difficulty: formModel.difficulty,
       description: formModel.description
     }
-    if (this.isNew)
+    if (!this.isNew)
       this.recipesService.updateRecipe(this.index, toSave);
     else
       this.recipesService.addRecipe(toSave);
