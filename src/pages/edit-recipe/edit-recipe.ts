@@ -26,9 +26,10 @@ import {RecipesService} from "../../services/recipes.service";
 })
 export class EditRecipePage implements OnInit {
   options = ['easy', 'medium', 'hard'];
-  private isNew: boolean;
+  private isNew = true;
   private formGroup: FormGroup;
   private recipe: Recipe;
+  private index: number;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -37,7 +38,7 @@ export class EditRecipePage implements OnInit {
               private  alertController: AlertController,
               private toastController: ToastController,
               private recipesService: RecipesService) {
-
+    // this.createForm()
   }
 
   get status(): string {
@@ -48,9 +49,33 @@ export class EditRecipePage implements OnInit {
     return this.formGroup.get('ingredients') as FormArray
   }
 
+
+  //
+  rebuildForm() {
+    let l = [];
+    if (this.recipe && this.recipe.ingredients)
+      l = this.recipe.ingredients.map(i => new FormControl(i.name, Validators.required))
+    // this.formGroup = this.fb.group({
+    //   name: [, [Validators.required]],
+    //   description: [, Validators.required],
+    //   difficulty: [, Validators.required],
+    //   ingredients: this.fb.array(l)
+    // })
+
+    this.formGroup.reset({
+      'name': new FormControl(this.isNew ? '' : this.recipe.name, Validators.required),
+      'description': new FormControl(this.isNew ? '' : this.recipe.description, Validators.required),
+      'difficulty': new FormControl(this.isNew ? 'easy' : this.recipe.difficulty, Validators.required),
+      'ingredients': new FormArray(l)
+    });
+
+  }
+
   ngOnInit(): void {
-    this.recipe = this.navParams.data as Recipe;
+    this.recipe = this.navParams.get('recipe') as Recipe;
+    this.index = this.navParams.get('index') as number;
     this.isNew = this.recipe === undefined;
+    // this.rebuildForm();
     this.createForm();
   }
 
@@ -74,8 +99,10 @@ export class EditRecipePage implements OnInit {
       difficulty: formModel.difficulty,
       description: formModel.description
     }
-
-    this.recipesService.addRecipe(toSave);
+    if (this.isNew)
+      this.recipesService.updateRecipe(this.index, toSave);
+    else
+      this.recipesService.addRecipe(toSave);
     this.formGroup.reset();
     this.navCtrl.popToRoot();
   }
@@ -135,13 +162,21 @@ export class EditRecipePage implements OnInit {
   }
 
   private createForm() {
-    this.formGroup = this.fb.group({
-      name: [this.isNew ? '' : this.recipe.name, [Validators.required]],
-      description: [this.isNew ? '' : this.recipe.description, Validators.required],
-      difficulty: [this.isNew ? 'easy' : this.recipe.difficulty, Validators.required],
-      ingredients: this.fb.array(this.isNew ? [] : this.recipe.ingredients)
+    let l = [];
+    if (this.recipe && this.recipe.ingredients)
+      l = this.recipe.ingredients.map(i => new FormControl(i.name, Validators.required))
+    // this.formGroup = this.fb.group({
+    //   name: [, [Validators.required]],
+    //   description: [, Validators.required],
+    //   difficulty: [, Validators.required],
+    //   ingredients: this.fb.array(l)
+    // })
 
-
-    })
+    this.formGroup = new FormGroup({
+      'name': new FormControl(this.isNew ? '' : this.recipe.name, Validators.required),
+      'description': new FormControl(this.isNew ? '' : this.recipe.description, Validators.required),
+      'difficulty': new FormControl(this.isNew ? 'easy' : this.recipe.difficulty, Validators.required),
+      'ingredients': new FormArray(l)
+    });
   }
 }

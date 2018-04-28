@@ -9,7 +9,6 @@ import {ShoppingListService} from "../../services/shopping-list.service";
   ],
   imports: [
     IonicPageModule.forChild(ShoppingListPage),
-  ],
-  providers:[ShoppingListService]
+  ]
 })
 export class ShoppingListPageModule {}

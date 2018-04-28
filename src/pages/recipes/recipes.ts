@@ -32,7 +32,7 @@ export class RecipesPage {
     this.navCtrl.push('EditRecipePage');
   }
 
-  onLoadRecipe(recipe: Recipe) {
-    this.navCtrl.push('RecipePage', recipe)
+  onLoadRecipe(recipe: Recipe,index:number) {
+    this.navCtrl.push('RecipePage', {recipe:recipe,index:index})
   }
 }
