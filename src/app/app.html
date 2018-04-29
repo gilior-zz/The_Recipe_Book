@@ -1,1 +1,15 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-menu type="overlay" [content]="nav">
+  <ion-content>
+    <ion-list>
+      <button ion-item (click)="goTo(signinPage)">sign in</button>
+      <button ion-item (click)="goTo(signupPage)">sign up</button>
+      <button ion-item menuClose detail-none>
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-nav #nav [root]="tabsPage"></ion-nav>
+
+

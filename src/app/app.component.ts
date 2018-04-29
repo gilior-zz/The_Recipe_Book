@@ -5,12 +5,14 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 
 import {TabsPage} from "../pages/tabs/tabs";
+import {SigninPage} from "../pages/signin/signin";
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = TabsPage;
-
+  tabsPage:any = TabsPage;
+  signinPage:string='SigninPage'
+  signupPage:string='SignupPage'
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -18,6 +20,10 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
     });
+  }
+
+  goTo(page){
+
   }
 }
 
