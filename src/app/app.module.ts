@@ -10,6 +10,7 @@ import {TabsPage} from "../pages/tabs/tabs";
 import {ExpansionService} from "../services/expansion";
 import {RecipesService} from "../services/recipes.service";
 import {ShoppingListService} from "../services/shopping-list.service";
+import {AuthService} from "../services/auth";
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import {ShoppingListService} from "../services/shopping-list.service";
     ExpansionService,
     RecipesService,
     ShoppingListService,
+    AuthService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
