@@ -7,19 +7,19 @@
 
   <ion-content>
     <ion-list>
-      <button icon-left ion-item (click)="goTo(tabsPage)">
+      <button  *ngIf="isAuthenticated" icon-left ion-item (click)="goTo(tabsPage)">
         <ion-icon name="book"></ion-icon>
         recipe book
       </button>
-      <button icon-left ion-item (click)="goTo(signinPage)">
+      <button *ngIf="!isAuthenticated" icon-left ion-item (click)="goTo(signinPage)">
         <ion-icon name="log-in"></ion-icon>
         sign in
       </button>
-      <button icon-left ion-item (click)="goTo(signupPage)">
+      <button *ngIf="!isAuthenticated" icon-left ion-item (click)="goTo(signupPage)">
         <ion-icon name="person"></ion-icon>
         sign up
       </button>
-      <button icon-left ion-item (click)="onLogout()">
+      <button *ngIf="isAuthenticated" icon-left ion-item (click)="onLogout()">
         <ion-icon name="log-out"></ion-icon>
         log out
       </button>

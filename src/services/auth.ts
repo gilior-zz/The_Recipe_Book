@@ -7,4 +7,6 @@ export class AuthService {
   }
 
   signUp(email:string,pwd:string){return firebase.auth().createUserWithEmailAndPassword(email,pwd)}
+  signIn(email:string,pwd:string){return firebase.auth().signInWithEmailAndPassword(email,pwd)}
+  signOut(){return firebase.auth().signOut()}
 }

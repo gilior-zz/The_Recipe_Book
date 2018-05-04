@@ -6,6 +6,7 @@ import firebase from 'firebase'
 
 import {TabsPage} from "../pages/tabs/tabs";
 import {SigninPage} from "../pages/signin/signin";
+import {AuthService} from "../services/auth";
 
 @Component({
   templateUrl: 'app.html'
@@ -15,13 +16,25 @@ export class MyApp {
   tabsPage: any = TabsPage;
   signinPage: string = 'SigninPage'
   signupPage: string = 'SignupPage'
+  isAuthenticated = false;
 
   constructor(platform: Platform, statusBar: StatusBar,
               splashScreen: SplashScreen,
-              private mnu: MenuController) {
+              private mnu: MenuController,
+              private authService: AuthService) {
     firebase.initializeApp({
       apiKey: "AIzaSyBZhLWjA2GdVm7Lei581s-smQ0TCnGAcu0",
       authDomain: "ion-recipe.firebaseapp.com"
+    })
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.isAuthenticated = true;
+        this.nav.setRoot(this.tabsPage);
+      }
+      else {
+        this.isAuthenticated = false;
+        this.nav.setRoot(this.signinPage);
+      }
     })
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -37,7 +50,8 @@ export class MyApp {
   }
 
   onLogout() {
-
+    this.authService.signOut();
+    this.mnu.close();
   }
 }
 

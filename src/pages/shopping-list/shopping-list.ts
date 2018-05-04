@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {IonicPage, NavController, NavParams, PopoverController} from 'ionic-angular';
 import {NgForm} from "@angular/forms";
 import {ShoppingListService} from "../../services/shopping-list.service";
 import {Ingredient} from "../../models/models";
@@ -23,7 +23,8 @@ export class ShoppingListPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private  shoppingListService: ShoppingListService,
-              private  changeDetectorRef: ChangeDetectorRef) {
+              private  changeDetectorRef: ChangeDetectorRef,
+              private  popoverController: PopoverController) {
   }
 
   get items(): Ingredient[] {
@@ -46,4 +47,11 @@ export class ShoppingListPage {
     this.shoppingListService.removeIngredient(item);
   }
 
+  onShowOptions(mse: MouseEvent) {
+
+    this.popoverController.create('SlOptionsPage')
+      .present({ev: mse})
+    // .then(i=>i.)
+    // .catch(i=>i.)
+  }
 }
