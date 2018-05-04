@@ -3,6 +3,7 @@ import {IonicPage, NavController, NavParams, PopoverController} from 'ionic-angu
 import {NgForm} from "@angular/forms";
 import {ShoppingListService} from "../../services/shopping-list.service";
 import {Ingredient} from "../../models/models";
+import {AuthService} from "../../services/auth";
 
 /**
  * Generated class for the ShoppingListPage page.
@@ -24,7 +25,8 @@ export class ShoppingListPage {
               public navParams: NavParams,
               private  shoppingListService: ShoppingListService,
               private  changeDetectorRef: ChangeDetectorRef,
-              private  popoverController: PopoverController) {
+              private  popoverController: PopoverController,
+              private  authService: AuthService) {
   }
 
   get items(): Ingredient[] {
@@ -49,9 +51,16 @@ export class ShoppingListPage {
 
   onShowOptions(mse: MouseEvent) {
 
-    this.popoverController.create('SlOptionsPage')
-      .present({ev: mse})
-    // .then(i=>i.)
-    // .catch(i=>i.)
+    let l = this.popoverController.create('SlOptionsPage');
+    l.present({ev: mse});
+    l.onDidDismiss(data =>
+    if (data.action === 'load') {
+      this.authService.user.getToken()
+        .then(i => {            })
+        .catch(i => {            })
+    }
+    else {
+
+    }
   }
 }
