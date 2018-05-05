@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams, PopoverController} from 'ionic-angular';
+import {IonicPage, LoadingController, NavController, NavParams, PopoverController} from 'ionic-angular';
 import {Recipe} from "../../models/models";
 import {RecipesService} from "../../services/recipes.service";
 
@@ -19,7 +19,8 @@ export class RecipesPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private recipesService: RecipesService,
-              private  popoverController: PopoverController) {
+              private  popoverController: PopoverController,
+              private loadingController: LoadingController) {
   }
 
   get recipes(): Recipe[] {
@@ -40,21 +41,26 @@ export class RecipesPage {
   }
 
   onSettings(event: MouseEvent) {
-    let l = this.popoverController.create('RecOptionsPage');
-    l.present({ev: event});
-    l.onDidDismiss(data => {
+    let popoverController = this.popoverController.create('ListOptionsPage');
+    popoverController.present({ev: event});
+    let l = this.loadingController.create({content: 'plz wait'});
+    popoverController.onDidDismiss(data => {
       if (data.action === 'load') {
+        l.present();
         this.recipesService.loadList()
           .subscribe(
             i => console.log(i),
-            error2 => console.log(error2)
+            error2 => console.log(error2),
+            () => l.dismissAll()
           )
       }
       else {
+        l.present();
         this.recipesService.saveList()
           .subscribe(
             i => console.log(i),
-            error2 => console.log(error2)
+            error2 => console.log(error2),
+            () => l.dismissAll()
           )
       }
     })
