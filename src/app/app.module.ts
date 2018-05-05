@@ -11,6 +11,7 @@ import {ExpansionService} from "../services/expansion";
 import {RecipesService} from "../services/recipes.service";
 import {ShoppingListService} from "../services/shopping-list.service";
 import {AuthService} from "../services/auth";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import {AuthService} from "../services/auth";
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],

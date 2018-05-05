@@ -1,5 +1,12 @@
 import {ChangeDetectorRef, Component} from '@angular/core';
-import {IonicPage, NavController, NavParams, PopoverController} from 'ionic-angular';
+import {
+  AlertController,
+  IonicPage,
+  LoadingController,
+  NavController,
+  NavParams,
+  PopoverController
+} from 'ionic-angular';
 import {NgForm} from "@angular/forms";
 import {ShoppingListService} from "../../services/shopping-list.service";
 import {Ingredient} from "../../models/models";
@@ -26,7 +33,9 @@ export class ShoppingListPage {
               private  shoppingListService: ShoppingListService,
               private  changeDetectorRef: ChangeDetectorRef,
               private  popoverController: PopoverController,
-              private  authService: AuthService) {
+              private  authService: AuthService,
+              private loadingController: LoadingController,
+              private alertController: AlertController) {
   }
 
   get items(): Ingredient[] {
@@ -53,14 +62,41 @@ export class ShoppingListPage {
 
     let l = this.popoverController.create('SlOptionsPage');
     l.present({ev: mse});
-    l.onDidDismiss(data =>
-    if (data.action === 'load') {
-      this.authService.user.getToken()
-        .then(i => {            })
-        .catch(i => {            })
-    }
-    else {
+    l.onDidDismiss(data => {
+      let loadingController = this.loadingController.create({content: 'plz wait'});
+      loadingController.present();
+      loadingController.dismissAll();
+      if (data.action === 'load') {
+        this.shoppingListService.fetchList()
+          .subscribe(
+            i => loadingController.dismissAll(),
+            error2 => {
+              this.handleError;
+              loadingController.dismissAll()
+            }
+          )
 
-    }
+      }
+      else {
+        this.shoppingListService.storeList()
+          .subscribe(
+            i => loadingController.dismissAll(),
+            error2 => {
+              this.handleError;
+              loadingController.dismissAll()
+            }
+          )
+        loadingController.dismissAll();
+      }
+
+    })
+
   }
+
+  private handleError(err: Error) {
+    let l = this.alertController.create({title: 'oopssss', message: err.message, buttons: ['Ok']});
+    l.present();
+  }
+
+
 }

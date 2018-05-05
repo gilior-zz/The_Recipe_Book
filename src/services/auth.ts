@@ -11,6 +11,16 @@ export class AuthService {
     return firebase.auth().currentUser;
   }
 
+  get uid(): string {
+    return firebase.auth().currentUser.uid;
+  }
+
+ // async get userToken(): string {
+ //    let l=await firebase.auth().currentUser.getToken();
+ //   return l;
+ //
+ //  }
+
   signUp(email: string, pwd: string) {
     return firebase.auth().createUserWithEmailAndPassword(email, pwd)
   }
@@ -21,5 +31,6 @@ export class AuthService {
 
   signOut() {
     return firebase.auth().signOut()
+
   }
 }
