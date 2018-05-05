@@ -43,24 +43,25 @@ export class RecipesPage {
   onSettings(event: MouseEvent) {
     let popoverController = this.popoverController.create('ListOptionsPage');
     popoverController.present({ev: event});
-    let l = this.loadingController.create({content: 'plz wait'});
+    let loadingController = this.loadingController.create({content: 'plz wait'});
     popoverController.onDidDismiss(data => {
+      if (!data) return;
       if (data.action === 'load') {
-        l.present();
+        loadingController.present();
         this.recipesService.loadList()
           .subscribe(
             i => console.log(i),
             error2 => console.log(error2),
-            () => l.dismissAll()
+            () => loadingController.dismissAll()
           )
       }
       else {
-        l.present();
+        loadingController.present();
         this.recipesService.saveList()
           .subscribe(
             i => console.log(i),
             error2 => console.log(error2),
-            () => l.dismissAll()
+            () => loadingController.dismissAll()
           )
       }
     })

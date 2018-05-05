@@ -61,13 +61,16 @@ export class ShoppingListPage {
 
   onShowOptions(mse: MouseEvent) {
 
-    let l = this.popoverController.create('SlOptionsPage');
+    let l = this.popoverController.create('ListOptionsPage');
     l.present({ev: mse});
     l.onDidDismiss(data => {
       let loadingController = this.loadingController.create({content: 'plz wait'});
-      loadingController.present();
-      loadingController.dismissAll();
+
+
+       if (!data) return;
+
       if (data.action === 'load') {
+        loadingController.present();
         this.shoppingListService.fetchList()
           .subscribe(
             i => loadingController.dismissAll(),
@@ -79,6 +82,7 @@ export class ShoppingListPage {
 
       }
       else {
+        loadingController.present();
         this.shoppingListService.storeList()
           .subscribe(
             i => loadingController.dismissAll(),
