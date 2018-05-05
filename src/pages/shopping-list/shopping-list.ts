@@ -11,6 +11,7 @@ import {NgForm} from "@angular/forms";
 import {ShoppingListService} from "../../services/shopping-list.service";
 import {Ingredient} from "../../models/models";
 import {AuthService} from "../../services/auth";
+import {HttpErrorResponse} from "@angular/common/http";
 
 /**
  * Generated class for the ShoppingListPage page.
@@ -93,7 +94,7 @@ export class ShoppingListPage {
 
   }
 
-  private handleError(err: Error) {
+  private handleError(err: HttpErrorResponse) {
     let l = this.alertController.create({title: 'oopssss', message: err.message, buttons: ['Ok']});
     l.present();
   }

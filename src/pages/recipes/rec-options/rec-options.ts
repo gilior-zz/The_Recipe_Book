@@ -3,15 +3,16 @@ import {Component} from "@angular/core";
 
 @IonicPage()
 @Component({
-  selector:'sl-options',
-  templateUrl: 'sl-options.html'
-
+  selector: 'rec-options',
+  templateUrl: 'rec-options.html'
 })
-export class SlOptionsPage {
-  constructor(private viewController: ViewController) {
+
+export class RecOptionsPage {
+
+
+  constructor(private   viewController:ViewController){
 
   }
-
   onAction(action: string) {
     this.viewController.dismiss({action})
   }

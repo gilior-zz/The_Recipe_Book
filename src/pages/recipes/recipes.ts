@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {IonicPage, NavController, NavParams, PopoverController} from 'ionic-angular';
 import {Recipe} from "../../models/models";
 import {RecipesService} from "../../services/recipes.service";
 
@@ -16,11 +16,14 @@ import {RecipesService} from "../../services/recipes.service";
   templateUrl: 'recipes.html',
 })
 export class RecipesPage {
-  constructor(public navCtrl: NavController, public navParams: NavParams, private RecipesService: RecipesService) {
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              private recipesService: RecipesService,
+              private  popoverController: PopoverController) {
   }
 
   get recipes(): Recipe[] {
-    return this.RecipesService.getRecipes();
+    return this.recipesService.getRecipes();
   }
 
   ionViewDidLoad() {
@@ -32,7 +35,28 @@ export class RecipesPage {
     this.navCtrl.push('EditRecipePage');
   }
 
-  onLoadRecipe(recipe: Recipe,index:number) {
-    this.navCtrl.push('RecipePage', {recipe:recipe,index:index})
+  onLoadRecipe(recipe: Recipe, index: number) {
+    this.navCtrl.push('RecipePage', {recipe: recipe, index: index})
+  }
+
+  onSettings(event: MouseEvent) {
+    let l = this.popoverController.create('RecOptionsPage');
+    l.present({ev: event});
+    l.onDidDismiss(data => {
+      if (data.action === 'load') {
+        this.recipesService.loadList()
+          .subscribe(
+            i => console.log(i),
+            error2 => console.log(error2)
+          )
+      }
+      else {
+        this.recipesService.saveList()
+          .subscribe(
+            i => console.log(i),
+            error2 => console.log(error2)
+          )
+      }
+    })
   }
 }

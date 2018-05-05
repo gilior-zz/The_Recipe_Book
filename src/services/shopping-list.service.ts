@@ -3,10 +3,12 @@ import {Ingredient} from "../models/models";
 import {AuthService} from "./auth";
 import {HttpClient} from "@angular/common/http";
 import {tap} from 'rxjs/operators'
+import {Const} from "../app/app.const";
+import dbURL = Const.dbURL;
 
 @Injectable()
 export class ShoppingListService {
-  dbURL = 'https://ion-recipe.firebaseio.com/';
+
   private ingredients: Ingredient[] = [
     new Ingredient('a', 1),
     new Ingredient('b', 2),
@@ -35,12 +37,12 @@ export class ShoppingListService {
 
   storeList() {
     // let url=this.dbURL+this.authService.uid+'/'+'s-l.json'+'?auth='+this.authService.uid;
-    let url = this.dbURL + this.authService.uid + '/' + 's-l.json';
+    let url = dbURL + this.authService.uid + '/' + 's-l.json';
     return this.httpClient.put(url, this.ingredients)
   }
 
   fetchList() {
-    let url = this.dbURL + this.authService.uid + '/' + 's-l.json';
+    let url = dbURL + this.authService.uid + '/' + 's-l.json';
     return this.httpClient.get(url)
       .pipe(
         tap((i: any[]) => {
